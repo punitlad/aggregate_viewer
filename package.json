@@ -1,0 +1,22 @@
+{
+  "name": "aggregate_viewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/punitlad/aggregate_viewer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/punitlad/aggregate_viewer/issues"
+  },
+  "homepage": "https://github.com/punitlad/aggregate_viewer#readme",
+  "dependencies": {
+    "mongodb": "^2.1.18"
+  }
+}
