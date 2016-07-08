@@ -3,20 +3,26 @@ var assert = require('assert');
 var properties_reader = require('properties-reader');
 
 var properties = properties_reader('./settings.properties');
-var aggregate_id_key = properties.get('aggregate.id.key');
 var database_connection = properties.get('database.connection');
 var table = properties.get('database.eventstore.name')
-var aggregate_id = process.argv[2];
 
 mongo_client.connect(database_connection, function(err, db) {
   assert.equal(null, err);
 
-  db.collection('domainevents').find({aggregate_id_key: aggregate_id}).toArray(
+  byAggregateId = {};
+  aggregate_id = process.argv[2];
+  byAggregateId[properties.get('aggregate.id.key')] = aggregate_id;
+  console.log(byAggregateId);
+
+  db.collection(table).find(byAggregateId).toArray(
     function(err, docs) {
       if (docs.length != 0) {
-        console.log(docs[0].payloadType);
+        for(var i = 0; i < docs.length; i++) {
+          console.log(docs[i].payloadType);
+          console.log(docs[i].serializedPayload);
+        }
       } else {
-        console.log("nothing found for " + aggregate_id + "-T_T-");
+        console.log("nothing found for " + aggregate_id + "in table " + table);
       }
       db.close();
     });
