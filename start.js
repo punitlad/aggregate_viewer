@@ -1,8 +1,10 @@
 var mongo_client = require('mongodb').MongoClient;
 var assert = require('assert');
 var properties_reader = require('properties-reader');
-var parseString = require('xml2js').parseString;
 var util = require('util');
+var parser = require('xml2json');
+var prettyjson = require('prettyjson');
+var sprintf=require("sprintf-js").sprintf;
 
 var properties = properties_reader('./settings.properties');
 var database_connection = properties.get('database.connection');
@@ -20,7 +22,8 @@ mongo_client.connect(database_connection, function(err, db) {
       if (docs.length != 0) {
         for(var i = 0; i < docs.length; i++) {
           console.log(docs[i].payloadType);
-          parseString(docs[i].serializedPayload, function (err, result) {  console.log(util.inspect(result, false, null)) });
+          var json = parser.toJson(docs[i].serializedPayload);
+          console.log("\t " + json);
         }
       } else {
         console.log("nothing found for " + aggregate_id + "in table " + table);
