@@ -18,6 +18,7 @@
   "homepage": "https://github.com/punitlad/aggregate_viewer#readme",
   "dependencies": {
     "mongodb": "^2.1.18",
-    "properties-reader": "0.0.15"
+    "properties-reader": "0.0.15",
+    "xml2js": "^0.4.17"
   }
 }
