@@ -4,12 +4,15 @@ var properties_reader = require('properties-reader');
 var util = require('util');
 var parser = require('xml2json');
 var prettyjson = require('prettyjson');
-var sprintf=require("sprintf-js").sprintf;
+var jp = require('jsonpath');
 
 var properties = properties_reader('./settings.properties');
 var database_connection = properties.get('database.connection');
-var table = properties.get('database.eventstore.name')
+var table = properties.get('database.eventstore.name');
+var eventName = properties.get('column.event.name');
+var eventPayload = properties.get('column.event.payload');
 
+console.log("");
 mongo_client.connect(database_connection, function(err, db) {
   assert.equal(null, err);
 
@@ -21,9 +24,11 @@ mongo_client.connect(database_connection, function(err, db) {
     function(err, docs) {
       if (docs.length != 0) {
         for(var i = 0; i < docs.length; i++) {
-          console.log(docs[i].payloadType);
-          var json = parser.toJson(docs[i].serializedPayload);
-          console.log("\t " + json);
+          console.log("event" + i + " \t\t" + jp.query(docs[i], '$..' + eventName));
+          var payload = jp.query(docs[i], '$..' + eventPayload);
+          var json = parser.toJson(payload[0]);
+          console.log("payload \t" + json);
+          console.log("");
         }
       } else {
         console.log("nothing found for " + aggregate_id + "in table " + table);
